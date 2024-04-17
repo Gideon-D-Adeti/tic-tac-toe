@@ -1,3 +1,9 @@
+const start = document.querySelector(".start");
+const playersInfoDialog = document.querySelector(".players-info-dialog")
+const cancelButton = document.querySelector(".cancel-button");
+const playersInfoForm = document.querySelector(".players-info-form");
+
+
 const Gameboard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
 
@@ -60,3 +66,12 @@ const GameController = (() => {
     startNewGame,
   };
 })();
+
+
+start.addEventListener("click", () => {
+    playersInfoDialog.showModal();
+})
+
+cancelButton.addEventListener("click", () => {
+    playersInfoDialog.close();
+})
