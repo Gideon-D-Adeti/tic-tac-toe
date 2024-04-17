@@ -1,0 +1,244 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap');
+
+
+/* Define custom variables */
+:root {
+    /* Colors */
+    --blue-color: #3b82f6;
+    --white-color: #fff;
+    --neutral-color: #d4d4d4;
+    --light-black: #0000005e;
+
+    /* Border radius: br */
+    --big-br: 16px;
+    --normal-br: 8px;
+    --small-br: 4px;
+
+    /* Gap */
+    --big-g: 16px;
+    --normal-g: 8px;
+    --small-g: 4px;
+
+    /* Padding */
+    --x-big-p: 32px 64px;
+    --big-p: 16px 32px;
+    --normal-p: 8px 16px;
+    --small-p: 4px 8px;
+
+    /* Others */
+    --shadow-style: 1px 2px 3px var(--light-black);
+}
+
+
+/* Apply general styling and reset */
+html {
+    box-sizing: border-box;
+    position: relative;
+    min-height: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3 {
+    font-family: "Montserrat", sans-serif;
+}
+
+input,
+button {
+    font-size: inherit;
+    border: none;
+    outline: none;
+    border-radius: var(--small-br);
+    cursor: pointer;
+}
+
+/* Style body element */
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: var(--neutral-color);
+    margin-bottom: 10vh;
+    margin-top: 15vh;
+}
+
+/* Style header element */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    color: var(--white-color);
+    background-color: var(--blue-color);
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-style);
+}
+
+/* Style main element */
+main {
+    padding: var(--x-big-p);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.start {
+    width: fit-content;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    padding: var(--normal-p);
+    border-radius: var(--normal-br);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.start:hover {
+    background-color: var(--light-black);
+    cursor: pointer;
+}
+
+.start:active {
+    transform: scale(0.9);
+}
+
+.start-icon {
+    font-size: 24px;
+    margin-right: -6px;
+    margin-top: 1.5px;
+}
+
+dialog {
+    margin: auto;
+    border: none;
+    outline: none;
+    padding: var(--big-p);
+    background-color: var(--neutral-color);
+    border-radius: var(--normal-br);
+    box-shadow: var(--shadow-style);
+}
+
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--normal-g);
+}
+
+dialog form div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--normal-g);
+}
+
+dialog input {
+    padding: var(--small-p);
+}
+
+dialog button {
+    padding: var(--normal-p);
+    transition: transform 0.3s;
+}
+
+dialog button:hover {
+    transform: scale(1.1);
+}
+
+dialog button[type="submit"] {
+    background-color: var(--blue-color);
+    color: var(--white-color);
+}
+
+dialog button[type="button"] {
+    background-color: var(--light-black);
+    color: var(--white-color);
+}
+
+dialog[open] {
+    animation: fade-in 0.5s ease-in forwards;
+}
+
+dialog[open]::backdrop {
+    animation: backdrop-fade-in 0.5s ease-in forwards;
+}
+
+/* Animation keyframes */
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+}
+
+@keyframes backdrop-fade-in {
+    0% {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        background-color: var(--light-black);
+    }
+}
+
+
+.game-container {
+    margin-top: 32px;
+}
+
+.game-container .cells {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(90px, 120px));
+    grid-template-rows: repeat(3, minmax(90px, 120px));
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cell:hover {
+    background-color: var(--light-black);
+}
+
+.cell:not(:nth-child(3n)) {
+    border-right: 4px solid black;
+    /* Right border for every cell except the last in each row */
+}
+
+.cell:not(:nth-last-child(-n+3)) {
+    border-bottom: 4px solid black;
+    /* Bottom border for every cell except the last three */
+}
+
+/* Style footer element */
+footer {
+    padding: var(--normal-p);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    font-weight: bold;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer .author {
+    color: inherit;
+    text-decoration: none;
+}
+
+footer .author:hover {
+    text-decoration: underline;
+}
