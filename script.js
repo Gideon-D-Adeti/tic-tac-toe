@@ -46,6 +46,15 @@ const GameController = (() => {
       drawScore,
       currentPlayer.getName()
     );
+
+    let cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        currentPlayer.makeMove(cell.id);
+        console.log(Gameboard.getBoard());
+        switchTurn();
+      })
+    })
   };
 
   const switchTurn = () => {
