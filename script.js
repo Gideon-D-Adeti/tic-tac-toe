@@ -1,8 +1,8 @@
 const start = document.querySelector(".start");
-const playersInfoDialog = document.querySelector(".players-info-dialog")
+const playersInfoDialog = document.querySelector(".players-info-dialog");
 const cancelButton = document.querySelector(".cancel-button");
 const playersInfoForm = document.querySelector(".players-info-form");
-
+const gameContainer = document.querySelector(".game-container");
 
 const Gameboard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
@@ -67,11 +67,48 @@ const GameController = (() => {
   };
 })();
 
+function getInputValues() {
+  const player1Name = playersInfoForm.querySelector("#player1-name").value;
+  const player1Symbol = playersInfoForm.querySelector(
+    'input[name="player1-symbol"]:checked'
+  ).value;
+  const player2Name = playersInfoForm.querySelector("#player2-name").value;
+  const player2Symbol = player1Symbol === "X" ? "O" : "X"; // Automatically assign symbol for Player 2
+
+  return {
+    player1Name,
+    player1Symbol,
+    player2Name,
+    player2Symbol,
+  };
+}
+
+function updateStatus(player1Name, player1Symbol, player2Name, player2Symbol) {
+  const player1NameHeader = gameContainer.querySelector(".player1-name");
+  const player2NameHeader = gameContainer.querySelector(".player2-name");
+  const vs = gameContainer.querySelector(".vs");
+
+  player1NameHeader.textContent = `${player1Name} (${player1Symbol})`;
+  player2NameHeader.textContent = `${player2Name} (${player2Symbol})`;
+
+  vs.textContent = "Vs.";
+}
 
 start.addEventListener("click", () => {
-    playersInfoDialog.showModal();
-})
+  playersInfoDialog.showModal();
+});
 
 cancelButton.addEventListener("click", () => {
-    playersInfoDialog.close();
-})
+  playersInfoDialog.close();
+});
+
+playersInfoForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const { player1Name, player1Symbol, player2Name, player2Symbol } =
+    getInputValues();
+
+  updateStatus(player1Name, player1Symbol, player2Name, player2Symbol);
+
+  playersInfoDialog.close();
+});
