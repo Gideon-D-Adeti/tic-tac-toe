@@ -49,10 +49,13 @@ const GameController = (() => {
     let cells = document.querySelectorAll(".cell");
     cells.forEach((cell) => {
       cell.addEventListener("click", () => {
-        currentPlayer.makeMove(cell.id);
-        updateCell(cell.id, currentPlayer.getSymbol());
-        switchTurn();
-        updateTurn(currentPlayer.getName());
+        if (currentPlayer.makeMove(cell.id)) {
+          updateCell(cell.id, currentPlayer.getSymbol());
+          switchTurn();
+          updateTurn(currentPlayer.getName());
+        } else {
+          updateTurn(currentPlayer.getName(), true);
+        }
       });
     });
   };
@@ -126,9 +129,14 @@ function updateScores(player1Score, player2Score, drawScore) {
   drawScoreSpan.textContent = drawScore;
 }
 
-function updateTurn(turn) {
+function updateTurn(turn, alert = false) {
   const turnSpan = gameContainer.querySelector(".turn");
-  turnSpan.textContent = `${turn}'s turn`;
+
+  if (!alert) {
+    turnSpan.textContent = `${turn}'s turn`;
+  } else {
+    turnSpan.textContent = `Yo, ${turn}, that space is already occupied!`;
+  }
 }
 
 function createPlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
@@ -139,9 +147,15 @@ function createPlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
 }
 
 function updateCell(cellId, playerSymbol) {
-  const cell = document.getElementById(cellId)
+  const cell = document.getElementById(cellId);
 
   cell.textContent = playerSymbol;
+}
+
+function clearCells() {
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.textContent = "";
+  });
 }
 
 start.addEventListener("click", () => {
@@ -165,6 +179,8 @@ playersInfoForm.addEventListener("submit", (event) => {
     player2Symbol
   );
 
+  console.log(Gameboard.resetBoard());
+  clearCells();
   GameController.startNewGame(player1, player2);
 
   playersInfoDialog.close();
