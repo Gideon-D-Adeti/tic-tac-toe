@@ -1,5 +1,5 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&family=Lato&display=swap');
 
 
 /* Define custom variables */
@@ -65,8 +65,7 @@ button {
 body {
     font-family: "Roboto", sans-serif;
     background-color: var(--neutral-color);
-    margin-bottom: 10vh;
-    margin-top: 15vh;
+    margin-top: 12.5vh;
 }
 
 /* Style header element */
@@ -187,15 +186,47 @@ dialog[open]::backdrop {
     }
 }
 
-
-.game-container {
-    margin-top: 32px;
+.status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.game-container .cells {
+.players {
+    align-self: normal;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.players div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--small-g);
+}
+
+.players span {
+    font-family: "Lato", sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+}
+
+.turns {
+    margin-top: 12px;
+    margin-bottom: 20px;
+}
+
+.turn {
+    font-style: italic;
+    font-weight: 900;
+}
+
+.cells {
     display: grid;
     grid-template-columns: repeat(3, minmax(90px, 120px));
     grid-template-rows: repeat(3, minmax(90px, 120px));
+    margin-bottom: 12px;
 }
 
 .cell {
@@ -212,13 +243,11 @@ dialog[open]::backdrop {
 }
 
 .cell:not(:nth-child(3n)) {
-    border-right: 4px solid black;
-    /* Right border for every cell except the last in each row */
+    border-right: 4px solid black; /* Right border for every cell except the last in each row */
 }
 
 .cell:not(:nth-last-child(-n+3)) {
-    border-bottom: 4px solid black;
-    /* Bottom border for every cell except the last three */
+    border-bottom: 4px solid black; /* Bottom border for every cell except the last three */
 }
 
 /* Style footer element */
