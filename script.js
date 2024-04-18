@@ -26,25 +26,26 @@ const Gameboard = (() => {
   };
 })();
 
-const Player = (name, symbol) => {
-  const getName = () => name;
-  const getSymbol = () => symbol;
-  const makeMove = function (index) {
-    return Gameboard.updateBoard(index, this);
-  };
-
-  return {
-    getName,
-    getSymbol,
-    makeMove,
-  };
-};
-
-const player1 = Player("Player 1", "X");
-const player2 = Player("Player 2", "O");
-
 const GameController = (() => {
-  let currentPlayer = player1;
+  let drawScore = 0;
+  let player1;
+  let player2;
+  let currentPlayer;
+
+  const startNewGame = (p1, p2) => {
+    player1 = p1;
+    player2 = p2;
+    currentPlayer = player1; // Start with player1
+    updateStatus(
+      player1.getName(),
+      player1.getSymbol(),
+      player2.getName(),
+      player2.getSymbol(),
+      player1.getScore(),
+      player2.getScore(),
+      drawScore
+    );
+  };
 
   const switchTurn = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
@@ -55,17 +56,29 @@ const GameController = (() => {
     // Logic to check for a winner
   };
 
-  const startNewGame = () => {
-    Gameboard.resetBoard();
-    currentPlayer = player1;
+  return {
+    startNewGame,
+    switchTurn,
+    checkForWinner,
+  };
+})();
+
+const Player = (name, symbol) => {
+  let score = 0;
+  const getName = () => name;
+  const getScore = () => score;
+  const getSymbol = () => symbol;
+  const makeMove = function (index) {
+    return Gameboard.updateBoard(index, this);
   };
 
   return {
-    switchTurn,
-    checkForWinner,
-    startNewGame,
+    getScore,
+    getName,
+    getSymbol,
+    makeMove,
   };
-})();
+};
 
 function getInputValues() {
   const player1Name = playersInfoForm.querySelector("#player1-name").value;
@@ -83,15 +96,39 @@ function getInputValues() {
   };
 }
 
-function updateStatus(player1Name, player1Symbol, player2Name, player2Symbol) {
+function updateStatus(
+  player1Name,
+  player1Symbol,
+  player2Name,
+  player2Symbol,
+  player1Score,
+  player2Score,
+  drawScore
+) {
   const player1NameHeader = gameContainer.querySelector(".player1-name");
+  const player1ScoreSpan = gameContainer.querySelector(".player1-score");
+
   const player2NameHeader = gameContainer.querySelector(".player2-name");
+  const player2ScoreSpan = gameContainer.querySelector(".player2-score");
+
   const vs = gameContainer.querySelector(".vs");
+  const drawScoreSpan = gameContainer.querySelector(".draw-score");
 
   player1NameHeader.textContent = `${player1Name} (${player1Symbol})`;
+  player1ScoreSpan.textContent = player1Score;
+
   player2NameHeader.textContent = `${player2Name} (${player2Symbol})`;
+  player2ScoreSpan.textContent = player2Score;
 
   vs.textContent = "Vs.";
+  drawScoreSpan.textContent = drawScore;
+}
+
+function createPlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
+  const player1 = Player(player1Name, player1Symbol);
+  const player2 = Player(player2Name, player2Symbol);
+
+  return { player1, player2 };
 }
 
 start.addEventListener("click", () => {
@@ -108,7 +145,14 @@ playersInfoForm.addEventListener("submit", (event) => {
   const { player1Name, player1Symbol, player2Name, player2Symbol } =
     getInputValues();
 
-  updateStatus(player1Name, player1Symbol, player2Name, player2Symbol);
+  const { player1, player2 } = createPlayers(
+    player1Name,
+    player1Symbol,
+    player2Name,
+    player2Symbol
+  );
+
+  GameController.startNewGame(player1, player2);
 
   playersInfoDialog.close();
 });
