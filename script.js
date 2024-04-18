@@ -43,7 +43,8 @@ const GameController = (() => {
       player2.getSymbol(),
       player1.getScore(),
       player2.getScore(),
-      drawScore
+      drawScore,
+      currentPlayer.getName()
     );
   };
 
@@ -103,7 +104,8 @@ function updateStatus(
   player2Symbol,
   player1Score,
   player2Score,
-  drawScore
+  drawScore,
+  turn
 ) {
   const player1NameHeader = gameContainer.querySelector(".player1-name");
   const player1ScoreSpan = gameContainer.querySelector(".player1-score");
@@ -113,6 +115,7 @@ function updateStatus(
 
   const vs = gameContainer.querySelector(".vs");
   const drawScoreSpan = gameContainer.querySelector(".draw-score");
+  const turnSpan = gameContainer.querySelector(".turn");
 
   player1NameHeader.textContent = `${player1Name} (${player1Symbol})`;
   player1ScoreSpan.textContent = player1Score;
@@ -122,6 +125,7 @@ function updateStatus(
 
   vs.textContent = "Vs.";
   drawScoreSpan.textContent = drawScore;
+  turnSpan.textContent = `${turn}'s turn`
 }
 
 function createPlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
