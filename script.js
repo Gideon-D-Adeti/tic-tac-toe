@@ -36,16 +36,15 @@ const GameController = (() => {
     player1 = p1;
     player2 = p2;
     currentPlayer = player1; // Start with player1
-    updateStatus(
+
+    updatePlayers(
       player1.getName(),
       player1.getSymbol(),
       player2.getName(),
-      player2.getSymbol(),
-      player1.getScore(),
-      player2.getScore(),
-      drawScore,
-      currentPlayer.getName()
+      player2.getSymbol()
     );
+    updateScores(player1.getScore(), player2.getScore(), drawScore);
+    updateTurn(currentPlayer.getName());
 
     let cells = document.querySelectorAll(".cell");
     cells.forEach((cell) => {
@@ -53,8 +52,9 @@ const GameController = (() => {
         currentPlayer.makeMove(cell.id);
         console.log(Gameboard.getBoard());
         switchTurn();
-      })
-    })
+        updateTurn(currentPlayer.getName());
+      });
+    });
   };
 
   const switchTurn = () => {
@@ -106,35 +106,29 @@ function getInputValues() {
   };
 }
 
-function updateStatus(
-  player1Name,
-  player1Symbol,
-  player2Name,
-  player2Symbol,
-  player1Score,
-  player2Score,
-  drawScore,
-  turn
-) {
+function updatePlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
   const player1NameHeader = gameContainer.querySelector(".player1-name");
-  const player1ScoreSpan = gameContainer.querySelector(".player1-score");
-
   const player2NameHeader = gameContainer.querySelector(".player2-name");
-  const player2ScoreSpan = gameContainer.querySelector(".player2-score");
-
   const vs = gameContainer.querySelector(".vs");
-  const drawScoreSpan = gameContainer.querySelector(".draw-score");
-  const turnSpan = gameContainer.querySelector(".turn");
 
   player1NameHeader.textContent = `${player1Name} (${player1Symbol})`;
-  player1ScoreSpan.textContent = player1Score;
-
   player2NameHeader.textContent = `${player2Name} (${player2Symbol})`;
-  player2ScoreSpan.textContent = player2Score;
-
   vs.textContent = "Vs.";
+}
+
+function updateScores(player1Score, player2Score, drawScore) {
+  const player1ScoreSpan = gameContainer.querySelector(".player1-score");
+  const player2ScoreSpan = gameContainer.querySelector(".player2-score");
+  const drawScoreSpan = gameContainer.querySelector(".draw-score");
+
+  player1ScoreSpan.textContent = player1Score;
+  player2ScoreSpan.textContent = player2Score;
   drawScoreSpan.textContent = drawScore;
-  turnSpan.textContent = `${turn}'s turn`
+}
+
+function updateTurn(turn) {
+  const turnSpan = gameContainer.querySelector(".turn");
+  turnSpan.textContent = `${turn}'s turn`;
 }
 
 function createPlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
