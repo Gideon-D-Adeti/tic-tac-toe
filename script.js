@@ -50,7 +50,7 @@ const GameController = (() => {
     cells.forEach((cell) => {
       cell.addEventListener("click", () => {
         currentPlayer.makeMove(cell.id);
-        console.log(Gameboard.getBoard());
+        updateCell(cell.id, currentPlayer.getSymbol());
         switchTurn();
         updateTurn(currentPlayer.getName());
       });
@@ -136,6 +136,12 @@ function createPlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
   const player2 = Player(player2Name, player2Symbol);
 
   return { player1, player2 };
+}
+
+function updateCell(cellId, playerSymbol) {
+  const cell = document.getElementById(cellId)
+
+  cell.textContent = playerSymbol;
 }
 
 start.addEventListener("click", () => {
