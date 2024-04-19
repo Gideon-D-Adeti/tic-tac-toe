@@ -227,6 +227,7 @@ dialog[open]::backdrop {
 .turns {
     margin-top: 12px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .turn {
