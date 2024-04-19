@@ -140,8 +140,8 @@ const GameController = (() => {
   };
 
   const startNewRound = () => {
-    gameOutcomeDialog.close();
     resetTieScore();
+    gameOutcomeDialog.close();
     playersInfoDialog.showModal();
   };
 
