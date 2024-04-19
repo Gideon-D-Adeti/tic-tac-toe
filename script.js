@@ -175,11 +175,9 @@ const Player = (name, symbol) => {
 
 function getInputValues() {
   const player1Name = playersInfoForm.querySelector("#player1-name").value;
-  const player1Symbol = playersInfoForm.querySelector(
-    'input[name="player1-symbol"]:checked'
-  ).value;
+  const player1Symbol = "X";
   const player2Name = playersInfoForm.querySelector("#player2-name").value;
-  const player2Symbol = player1Symbol === "X" ? "O" : "X"; // Automatically assign symbol for Player 2
+  const player2Symbol = "O"
 
   return {
     player1Name,
