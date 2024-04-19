@@ -37,6 +37,11 @@ const GameController = (() => {
     player2 = p2;
     currentPlayer = player1; // Start with player1
 
+    // Clear previous board state and event listeners
+    Gameboard.resetBoard();
+    clearCells();
+    clearCellEventListeners();
+
     updatePlayers(
       player1.getName(),
       player1.getSymbol(),
@@ -44,20 +49,13 @@ const GameController = (() => {
       player2.getSymbol()
     );
     updateScores(player1.getScore(), player2.getScore(), drawScore);
-    updateTurn(currentPlayer.getName());
 
-    let cells = document.querySelectorAll(".cell");
-    cells.forEach((cell) => {
-      cell.addEventListener("click", () => {
-        if (currentPlayer.makeMove(cell.id)) {
-          updateCell(cell.id, currentPlayer.getSymbol());
-          switchTurn();
-          updateTurn(currentPlayer.getName());
-        } else {
-          updateTurn(currentPlayer.getName(), true);
-        }
-      });
+    // Add event listeners to cells
+    document.querySelectorAll(".cell").forEach((cell) => {
+      cell.addEventListener("click", handleCellClick);
     });
+
+    updateTurn(currentPlayer.getName());
   };
 
   const switchTurn = () => {
@@ -67,6 +65,25 @@ const GameController = (() => {
   const checkForWinner = () => {
     const board = Gameboard.getBoard();
     // Logic to check for a winner
+  };
+
+  const handleCellClick = (event) => {
+    const cellId = event.target.id;
+    const isSpaceOccupied = !Gameboard.updateBoard(cellId, currentPlayer);
+
+    if (!isSpaceOccupied) {
+      updateCell(cellId, currentPlayer.getSymbol());
+      switchTurn();
+      updateTurn(currentPlayer.getName());
+    } else {
+      updateTurn(currentPlayer.getName(), true);
+    }
+  };
+
+  const clearCellEventListeners = () => {
+    document.querySelectorAll(".cell").forEach((cell) => {
+      cell.removeEventListener("click", handleCellClick);
+    });
   };
 
   return {
@@ -158,6 +175,11 @@ function clearCells() {
   });
 }
 
+function clearInputValues() {
+  playersInfoForm.querySelector("#player1-name").value = "";
+  playersInfoForm.querySelector("#player2-name").value = "";
+}
+
 start.addEventListener("click", () => {
   playersInfoDialog.showModal();
 });
@@ -179,9 +201,7 @@ playersInfoForm.addEventListener("submit", (event) => {
     player2Symbol
   );
 
-  console.log(Gameboard.resetBoard());
-  clearCells();
   GameController.startNewGame(player1, player2);
-
+  clearInputValues();
   playersInfoDialog.close();
 });
