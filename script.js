@@ -140,7 +140,10 @@ const GameController = (() => {
   };
 
   const startNewRound = () => {
+    resetGameContainer();
+    clearCellEventListeners();
     resetTieScore();
+    Gameboard.resetBoard();
     gameOutcomeDialog.close();
     playersInfoDialog.showModal();
   };
@@ -177,7 +180,7 @@ function getInputValues() {
   const player1Name = playersInfoForm.querySelector("#player1-name").value;
   const player1Symbol = "X";
   const player2Name = playersInfoForm.querySelector("#player2-name").value;
-  const player2Symbol = "O"
+  const player2Symbol = "O";
 
   return {
     player1Name,
@@ -249,6 +252,20 @@ function displayGameOutCome(outcome) {
     outcomeHeader.textContent = `${outcome} wins!`;
   }
   gameOutcomeDialog.showModal();
+}
+
+function resetGameContainer() {
+  gameContainer.querySelector(".player1-name").textContent = "";
+  gameContainer.querySelector(".player2-name").textContent = "";
+  gameContainer.querySelector(".vs").textContent = "";
+
+  gameContainer.querySelector(".player1-score").textContent = "";
+  gameContainer.querySelector(".player2-score").textContent = "";
+  gameContainer.querySelector(".tie-score").textContent = "";
+
+  gameContainer.querySelector(".turn").textContent = "";
+
+  clearCells();
 }
 
 start.addEventListener("click", () => {
