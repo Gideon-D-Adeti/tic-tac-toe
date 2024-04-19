@@ -12,5 +12,8 @@ Tic Tac Toe is a simple two-player game where players take turns marking spaces 
 ## Usage
 - Click [here](https://gideon-d-adeti.github.io/tic-tac-toe/) to play the game.
 
+## Contributing
+- Contributions are welcome! If you have any suggestions, feature requests, or bug reports, please open an issue or create a pull request.
+
 ## Note
 - This project was built as part of my web development journey on [The Odin Project](https://theodinproject.com/).
