@@ -3,6 +3,9 @@ const playersInfoDialog = document.querySelector(".players-info-dialog");
 const cancelButton = document.querySelector(".cancel-button");
 const playersInfoForm = document.querySelector(".players-info-form");
 const gameContainer = document.querySelector(".game-container");
+const gameOutcomeDialog = document.querySelector(".game-outcome-dialog");
+const nextGameButton = gameOutcomeDialog.querySelector(".next-game");
+const newGameButton = document.querySelector(".new-game");
 
 const Gameboard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
@@ -27,10 +30,13 @@ const Gameboard = (() => {
 })();
 
 const GameController = (() => {
-  let drawScore = 0;
+  let tieScore = 0;
   let player1;
   let player2;
   let currentPlayer;
+
+  const increaseTieScore = () => tieScore++;
+  const resetTieScore = () => (tieScore = 0);
 
   const startNewGame = (p1, p2) => {
     player1 = p1;
@@ -48,7 +54,7 @@ const GameController = (() => {
       player2.getName(),
       player2.getSymbol()
     );
-    updateScores(player1.getScore(), player2.getScore(), drawScore);
+    updateScores(player1.getScore(), player2.getScore(), tieScore);
 
     // Add event listeners to cells
     document.querySelectorAll(".cell").forEach((cell) => {
@@ -64,7 +70,42 @@ const GameController = (() => {
 
   const checkForWinner = () => {
     const board = Gameboard.getBoard();
-    // Logic to check for a winner
+
+    // Define winning combinations
+    const winningCombinations = [
+      // Rows
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      // Columns
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      // Diagonals
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    // Check each winning combination
+    for (const combination of winningCombinations) {
+      const [a, b, c] = combination;
+      if (board[a] !== "" && board[a] === board[b] && board[a] === board[c]) {
+        return true;
+      }
+    }
+
+    // If no winner is found
+    return false;
+  };
+
+  const checkForDraw = () => {
+    const board = Gameboard.getBoard();
+
+    if (board.every((cell) => cell !== "")) {
+      return true;
+    }
+
+    return false;
   };
 
   const handleCellClick = (event) => {
@@ -73,6 +114,13 @@ const GameController = (() => {
 
     if (!isSpaceOccupied) {
       updateCell(cellId, currentPlayer.getSymbol());
+      if (checkForWinner()) {
+        currentPlayer.increaseScore();
+        displayGameOutCome(currentPlayer.getName());
+      } else if (checkForDraw()) {
+        increaseTieScore();
+        displayGameOutCome("tie");
+      }
       switchTurn();
       updateTurn(currentPlayer.getName());
     } else {
@@ -86,8 +134,21 @@ const GameController = (() => {
     });
   };
 
+  const startNextGame = () => {
+    gameOutcomeDialog.close();
+    startNewGame(player1, player2);
+  };
+
+  const startNewRound = () => {
+    gameOutcomeDialog.close();
+    resetTieScore();
+    playersInfoDialog.showModal();
+  };
+
   return {
     startNewGame,
+    startNextGame,
+    startNewRound,
     switchTurn,
     checkForWinner,
   };
@@ -97,12 +158,14 @@ const Player = (name, symbol) => {
   let score = 0;
   const getName = () => name;
   const getScore = () => score;
+  const increaseScore = () => score++;
   const getSymbol = () => symbol;
   const makeMove = function (index) {
     return Gameboard.updateBoard(index, this);
   };
 
   return {
+    increaseScore,
     getScore,
     getName,
     getSymbol,
@@ -136,14 +199,14 @@ function updatePlayers(player1Name, player1Symbol, player2Name, player2Symbol) {
   vs.textContent = "Vs.";
 }
 
-function updateScores(player1Score, player2Score, drawScore) {
+function updateScores(player1Score, player2Score, tieScore) {
   const player1ScoreSpan = gameContainer.querySelector(".player1-score");
   const player2ScoreSpan = gameContainer.querySelector(".player2-score");
-  const drawScoreSpan = gameContainer.querySelector(".draw-score");
+  const tieScoreSpan = gameContainer.querySelector(".tie-score");
 
   player1ScoreSpan.textContent = player1Score;
   player2ScoreSpan.textContent = player2Score;
-  drawScoreSpan.textContent = drawScore;
+  tieScoreSpan.textContent = tieScore;
 }
 
 function updateTurn(turn, alert = false) {
@@ -180,6 +243,16 @@ function clearInputValues() {
   playersInfoForm.querySelector("#player2-name").value = "";
 }
 
+function displayGameOutCome(outcome) {
+  const outcomeHeader = gameOutcomeDialog.querySelector(".outcome");
+  if (outcome === "tie") {
+    outcomeHeader.textContent = "It's a tie!";
+  } else {
+    outcomeHeader.textContent = `${outcome} wins!`;
+  }
+  gameOutcomeDialog.showModal();
+}
+
 start.addEventListener("click", () => {
   playersInfoDialog.showModal();
 });
@@ -205,3 +278,7 @@ playersInfoForm.addEventListener("submit", (event) => {
   clearInputValues();
   playersInfoDialog.close();
 });
+
+nextGameButton.addEventListener("click", GameController.startNextGame);
+
+newGameButton.addEventListener("click", GameController.startNewRound);

@@ -125,9 +125,21 @@ dialog {
     box-shadow: var(--shadow-style);
 }
 
-dialog form {
+dialog form, .game-outcome-dialog[open] {
     display: flex;
     flex-direction: column;
+    gap: var(--normal-g);
+}
+
+.game-outcome-dialog {
+    align-items: center;
+}
+
+.game-outcome-dialog .play-again {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: var(--normal-g);
 }
 
@@ -151,12 +163,12 @@ dialog button:hover {
     transform: scale(1.1);
 }
 
-dialog button[type="submit"] {
+dialog button[type="submit"], .next-game {
     background-color: var(--blue-color);
     color: var(--white-color);
 }
 
-dialog button[type="button"] {
+dialog button[type="button"], .new-game {
     background-color: var(--light-black);
     color: var(--white-color);
 }
